@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("/api/topics", () => {
-  test.only("test endpoint replies with status 200 and returns an array of topic objects ", () => {
+  test("test endpoint replies with status 200 and returns an array of topic objects ", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
