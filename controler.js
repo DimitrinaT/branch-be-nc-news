@@ -1,4 +1,19 @@
-const fetchAllTopics = require("./model");
+
+const {fetchAllArticles, fetchAllTopics}  = require("./model");
+
+const getArticles = (req, res, next) => {
+  fetchAllArticles()
+    .then((articles) => {
+      if (articles.length === 0) {
+        res.status(404).send({ message: "Not Found" });
+      } else {
+        res.status(200).send({ articles: articles });
+  }
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
 
 const getTopics = (req, res, next) => {
   fetchAllTopics()
@@ -7,6 +22,7 @@ const getTopics = (req, res, next) => {
         res.status(404).send({ message: "Not Found" });
       } else {
         res.status(200).send({ topics: topics });
+
       }
     })
     .catch((error) => {
@@ -14,4 +30,7 @@ const getTopics = (req, res, next) => {
     });
 };
 
-module.exports = getTopics;
+
+module.exports = {getArticles, getTopics}
+
+
