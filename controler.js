@@ -1,4 +1,8 @@
-const { fetchAllArticles, fetchAllTopics } = require("./model");
+const {
+  fetchAllArticles,
+  fetchAllTopics,
+  fetchOneArticle,
+} = require("./model");
 
 const getArticles = (req, res, next) => {
   fetchAllArticles()
@@ -20,4 +24,16 @@ const getTopics = (req, res, next) => {
     });
 };
 
-module.exports = { getArticles, getTopics };
+const getArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+
+  fetchOneArticle(article_id)
+    .then((article) => {
+      res.send({ article });
+    })
+    .catch((error) => {
+      next(error);
+    });
+};
+
+module.exports = { getArticles, getTopics, getArticleById };
