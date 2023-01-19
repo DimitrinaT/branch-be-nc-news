@@ -51,6 +51,11 @@ describe("/api/topics", () => {
       });
   });
   test("test endpoint replies with status 404 when path is mispelt", () => {
-    return request(app).get("/api/topiks").expect(404);
+    return request(app)
+      .get("/api/topiks")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Path not found");
+      });
   });
 });
