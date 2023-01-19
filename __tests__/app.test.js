@@ -32,10 +32,27 @@ describe("/api/articles", () => {
           expect(article).toHaveProperty("article_id");
           expect(article).toHaveProperty("comment_count");
           expect(article).toHaveProperty("article_id");
+   });
+      });
+  });
+describe("/api/topics", () => {
+  test("test endpoint replies with status 200 and returns an array of topic objects ", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.topics).toEqual(testData.topicData);
+
+        response.body.topics.forEach((topic) => {
+          expect(topic).toHaveProperty("description");
+          expect(topic).toHaveProperty("slug");
+
         });
       });
   });
   test("test endpoint replies with status 404 when path is mispelt", () => {
-    return request(app).get("/api/articless").expect(404);
+
+    return request(app).get("/api/topiks").expect(404);
+
   });
 });
