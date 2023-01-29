@@ -95,3 +95,38 @@ describe("/api/articles/:article_id", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments", () => {
+  test("test endpoint replies with status 200 and returns an array of comment objects ", () => {
+    return request(app)
+      .get("/api/articles/6/comments")
+      .expect(200)
+      .then((response) => {
+        response.body.comments.forEach((comment) => {
+          expect(comment).toHaveProperty("comment_id");
+          expect(comment).toHaveProperty("votes");
+          expect(comment).toHaveProperty("created_at");
+          expect(comment).toHaveProperty("author");
+          expect(comment).toHaveProperty("body");
+          expect(comment).toHaveProperty("article_id");
+        });
+      });
+  });
+
+  test("test endpoint replies with status 404 when the provided id is not in the database", () => {
+    return request(app)
+      .get("/api/articles/76/comments")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toEqual("Comment Not Found");
+      });
+  });
+  test("response with status 400 and a massage when passed an id of incorect data type ", () => {
+    return request(app)
+      .get("/api/articles/apple/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+});
