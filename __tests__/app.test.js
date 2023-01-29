@@ -96,13 +96,13 @@ describe("/api/articles/:article_id", () => {
   });
 });
 
-describe("/api/articles/:article_id", () => {
+describe("/api/articles/:article_id/comments", () => {
   test("test endpoint replies with status 200 and returns an array of comment objects ", () => {
     return request(app)
       .get("/api/articles/6/comments")
       .expect(200)
       .then((response) => {
-        response.body.comment.forEach((comment) => {
+        response.body.comments.forEach((comment) => {
           expect(comment).toHaveProperty("comment_id");
           expect(comment).toHaveProperty("votes");
           expect(comment).toHaveProperty("created_at");
