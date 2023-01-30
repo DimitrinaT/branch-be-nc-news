@@ -5,12 +5,18 @@ const {
   getArticles,
   getArticleById,
   getArticleComments,
+  postArticleComment,
+  patchArticleById,
 } = require("./controler");
+
+app.use(express.json());
 
 app.get("/api/articles", getArticles);
 app.get("/api/topics", getTopics);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleComments);
+app.post("/api/articles/:article_id/comments", postArticleComment);
+app.patch("/api/articles/:article_id", patchArticleById);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
