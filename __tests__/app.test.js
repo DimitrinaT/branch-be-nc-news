@@ -130,3 +130,113 @@ describe("/api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id/comments", () => {
+  test("test endpoint replies with status 201 and returns an object of the posted comment ", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: "lurker", body: "Hello Guys" })
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comment.body).toEqual("Hello Guys");
+        expect(body.comment.article_id).toEqual(1);
+        expect(body.comment.author).toEqual("lurker");
+        expect(body.comment.votes).toEqual(0);
+      });
+  });
+  test("test endpoint replies with status 400 and returns an error message of Article ID must be a number ", () => {
+    return request(app)
+      .post("/api/articles/apple/comments")
+      .send({ username: "lurker", body: "Hello Guys" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article ID must be a number");
+      });
+  });
+  test("test endpoint replies with status 404 and returns an error message of Missing proper keys and values ", () => {
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send({ username: null, body: "Hello Guys" })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Missing proper keys and values");
+      });
+  });
+});
+
+describe("/api/articles/:article_id", () => {
+  test("test endpoint replies with status 200 and returns an object of the updated article (incrementing)", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: 1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual({
+          article_id: 2,
+          title: "Sony Vaio; or, The Laptop",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
+          created_at: "2020-10-16T05:03:00.000Z",
+          votes: 1,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("test endpoint replies with status 200 and returns an object of the updated article (decrementing)", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: -1 })
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual({
+          article_id: 2,
+          title: "Sony Vaio; or, The Laptop",
+          topic: "mitch",
+          author: "icellusedkars",
+          body: "Call me Mitchell. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would buy a laptop about a little and see the codey part of the world. It is a way I have of driving off the spleen and regulating the circulation. Whenever I find myself growing grim about the mouth; whenever it is a damp, drizzly November in my soul; whenever I find myself involuntarily pausing before coffin warehouses, and bringing up the rear of every funeral I meet; and especially whenever my hypos get such an upper hand of me, that it requires a strong moral principle to prevent me from deliberately stepping into the street, and methodically knocking people’s hats off—then, I account it high time to get to coding as soon as I can. This is my substitute for pistol and ball. With a philosophical flourish Cato throws himself upon his sword; I quietly take to the laptop. There is nothing surprising in this. If they but knew it, almost all men in their degree, some time or other, cherish very nearly the same feelings towards the the Vaio with me.",
+          created_at: "2020-10-16T05:03:00.000Z",
+          votes: -1,
+          article_img_url:
+            "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+        });
+      });
+  });
+  test("test endpoint replies with status 404 and returns an error message of article not found", () => {
+    return request(app)
+      .patch("/api/articles/75")
+      .send({ inc_votes: 1 })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article Not Found");
+      });
+  });
+  test("test endpoint replies with status 400 and returns an error message of Article ID must be a number", () => {
+    return request(app)
+      .patch("/api/articles/apple")
+      .send({ inc_votes: 1 })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article ID must be a number");
+      });
+  });
+  test("test endpoint replies with status 400 and returns an error message of inc_votes must be a number", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: "apple" })
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("inc_votes must be a number");
+      });
+  });
+  test("test endpoint replies with status 400 and returns an error message of Missing proper keys and values", () => {
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: null })
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Missing proper keys and values");
+      });
+  });
+});
