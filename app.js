@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const {
   getTopics,
@@ -8,6 +9,8 @@ const {
   postArticleComment,
   patchArticleById,
 } = require("./controler");
+
+app.use(cors());
 
 app.use(express.json());
 
