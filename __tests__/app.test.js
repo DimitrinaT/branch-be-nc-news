@@ -265,3 +265,53 @@ describe("/api/users", () => {
       });
   });
 });
+
+describe("/api/articles?topic=cats&sort_by=article_id&order=asc", () => {
+  test("test endpoint replies with status 200 and returns an array of articles objects which have topics named cats and the data is ordered by ascending order and sorted by article_id", () => {
+    return request(app)
+      .get("/api/articles?topic=cats&sort_by=article_id&order=asc")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toEqual(1);
+        expect(response.body.articles).toEqual([
+          {
+            article_id: 5,
+            title: "UNCOVERED: catspiracy to bring down democracy",
+            topic: "cats",
+            author: "rogersop",
+            body: "Bastet walks amongst us, and the cats are taking arms!",
+            created_at: "2020-08-03T13:14:00.000Z",
+            votes: 0,
+            article_img_url:
+              "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            comment_count: "2",
+          },
+        ]);
+      });
+  });
+});
+
+describe("/api/articles?sort_by=article_id&order=asc", () => {
+  test("test endpoint replies with status 200 and returns an array of articles objects the data is ordered by ascending order and sorted by article_id", () => {
+    return request(app)
+      .get("/api/articles?sort_by=article_id&order=asc")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.articles.length).toEqual(
+          testData.articleData.length
+        );
+        response.body.articles.forEach((article) => {
+          expect(article).toHaveProperty("title");
+          expect(article).toHaveProperty("topic");
+          expect(article).toHaveProperty("author");
+          expect(article).toHaveProperty("body");
+          expect(article).toHaveProperty("created_at");
+          expect(article).toHaveProperty("votes");
+          expect(article).toHaveProperty("article_img_url");
+          expect(article).toHaveProperty("article_id");
+          expect(article).toHaveProperty("comment_count");
+          expect(article).toHaveProperty("article_id");
+        });
+      });
+  });
+});

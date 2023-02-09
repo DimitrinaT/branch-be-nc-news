@@ -9,11 +9,15 @@ const {
 } = require("./model");
 
 const getArticles = (req, res, next) => {
-  fetchAllArticles()
+  const topic = req.query.topic || "";
+  const sort_by = req.query.sort_by || "created_at";
+  const order = req.query.order || "desc";
+  fetchAllArticles(topic, sort_by, order)
     .then((articles) => {
       res.status(200).send({ articles: articles });
     })
     .catch((error) => {
+      console.log(error);
       next(error);
     });
 };
