@@ -61,6 +61,7 @@ const postArticleComment = (req, res, next) => {
       res.status(201).send({ comment });
     })
     .catch((error) => {
+      console.log(error);
       next(error);
     });
 };
