@@ -240,3 +240,28 @@ describe("/api/articles/:article_id", () => {
       });
   });
 });
+
+describe("/api/users", () => {
+  test("test endpoint replies with status 200 and returns an array of users objects ", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+        expect(response.body.users).toEqual(testData.userData);
+
+        response.body.users.forEach((user) => {
+          expect(user).toHaveProperty("username");
+          expect(user).toHaveProperty("name");
+          expect(user).toHaveProperty("avatar_url");
+        });
+      });
+  });
+  test("test endpoint replies with status 404 when path is mispelt", () => {
+    return request(app)
+      .get("/api/userss")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Path not found");
+      });
+  });
+});

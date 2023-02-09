@@ -8,6 +8,7 @@ const {
   getArticleComments,
   postArticleComment,
   patchArticleById,
+  getUsers,
 } = require("./controler");
 
 app.use(cors());
@@ -20,6 +21,7 @@ app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getArticleComments);
 app.post("/api/articles/:article_id/comments", postArticleComment);
 app.patch("/api/articles/:article_id", patchArticleById);
+app.get("/api/users", getUsers);
 
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {

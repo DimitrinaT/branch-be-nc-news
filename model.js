@@ -92,6 +92,15 @@ const updateArticleById = (article_id, inc_votes) => {
     });
 };
 
+const fetchAllUsers = () => {
+  return db.query(`SELECT * FROM users;`).then((result) => {
+    if (result.rows.lenght === 0) {
+      return Promise.reject({ status: 404, msg: "Users Not Found" });
+    }
+    return result.rows;
+  });
+};
+
 module.exports = {
   fetchAllTopics,
   fetchAllArticles,
@@ -99,4 +108,5 @@ module.exports = {
   fetchCommentsByArticleId,
   addCommentByArticleId,
   updateArticleById,
+  fetchAllUsers,
 };
