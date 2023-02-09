@@ -1,6 +1,12 @@
 const db = require("./db/connection");
 
 const fetchAllArticles = (topic, sort_by, order) => {
+  if (order !== "desc" && order !== "asc") {
+    return Promise.reject({
+      status: 400,
+      msg: "order must be either asc or desc",
+    });
+  }
   if (topic === "") {
     return db
       .query(
@@ -9,6 +15,9 @@ const fetchAllArticles = (topic, sort_by, order) => {
        ORDER BY ${sort_by} ${order}`
       )
       .then((result) => {
+        if (result.rows.length === 0) {
+          return Promise.reject({ status: 404, msg: "Articles not found" });
+        }
         return result.rows;
       });
   } else {
@@ -20,6 +29,9 @@ const fetchAllArticles = (topic, sort_by, order) => {
        ORDER BY ${sort_by} ${order}`
       )
       .then((result) => {
+        if (result.rows.length === 0) {
+          return Promise.reject({ status: 404, msg: "Articles not found" });
+        }
         return result.rows;
       });
   }

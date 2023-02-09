@@ -315,3 +315,21 @@ describe("/api/articles?sort_by=article_id&order=asc", () => {
       });
   });
 });
+
+test("test endpoint replies with status 400 and returns an error message of order must be either asc or desc", () => {
+  return request(app)
+    .get("/api/articles?order=1")
+    .expect(400)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("order must be either asc or desc");
+    });
+});
+
+test("test endpoint replies with status 404 and returns an error message of articles not found", () => {
+  return request(app)
+    .get("/api/articles?topic=mouse&order=asc")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("Articles not found");
+    });
+});
